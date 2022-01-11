@@ -2,7 +2,7 @@
 let db;
 
 // Establishing Database Location
-const request = indexedDB.open("budget_tracker", 1);
+const request = indexedDB.open("Money_Tracker", 1);
 
 request.onupgradeneeded = function (event) {
   // Saving Data Base Reference
