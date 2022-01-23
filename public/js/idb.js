@@ -1,15 +1,18 @@
+// create variable
 let db;
-const request = indexedDB.open('moneytracker_budget', 1);
 
-request.onupgradeneeded = function(event) {
+// establish a connection to IndexedDB database called 'budget_tracker' and set it to version 1
+const request = indexedDB.open("moneytracker_budget", 1);
+
+request.onupgradeneeded = function (event) {
+  // save a reference to the database
   const db = event.target.result;
-  db.createObjectStore('new-transaction', { autoIncrement: true });
+  db.createObjectStore("new_transaction", { autoIncrement: true });
 };
 
-request.onsuccess = function(event) {
+request.onsuccess = function (event) {
   db = event.target.result;
   if (navigator.onLine) {
-    uploadExpenses();
   }
 };
 
@@ -18,27 +21,23 @@ request.onerror = function (event) {
 };
 
 function saveRecord(record) {
-  const transaction = db.transaction(['new-transaction'], 'readwrite');
-  const moneyObjectStore = transaction.objectStore('new-transaction');
-  moneyObjectStore.add(record);
+  const transaction = db.transaction(["new_transaction"], "readwrite");
+  const budgetObjectStore = transaction.objectStore("new_transaction");
+  budgetObjectStore.add(record);
 }
 
-// Function to upload transaction
-function uploadExpenses() {
-  const transaction = db.transaction(['new-transaction'], 'readwrite');
-  const moneyObjectStore = transaction.objectStore('new-transaction');
-
-  // get all records set to a variable
-  const getAll = moneyObjectStore.getAll();
-
+function uploadTransaction() {
+  const transaction = db.transaction(["new_transaction"], "readwrite");
+  const budgetObjectStore = transaction.objectStore("new_transaction");
+  const getAll = budgetObjectStore.getAll();
   getAll.onsuccess = function () {
     if (getAll.result.length > 0) {
-      fetch('/api/transaction', {
-        method: 'POST',
+      fetch("/api/transaction", {
+        method: "POST",
         body: JSON.stringify(getAll.result),
         headers: {
-          Accept: 'application/json, text/plain, */*',
-          'Content-Type': 'application/json',
+          Accept: "application/json, text/plain, */*",
+          "Content-Type": "application/json",
         },
       })
         .then((response) => response.json())
@@ -46,9 +45,11 @@ function uploadExpenses() {
           if (serverResponse.message) {
             throw new Error(serverResponse);
           }
-          const transaction = db.transaction(['new-transaction'], 'readwrite');
-          const moneyObjectStore = transaction.objectStore('new-transaction');
-          moneyObjectStore.clear();
+          const transaction = db.transaction(["new_transaction"], "readwrite");
+          re;
+          const budgetObjectStore = transaction.objectStore("new_transaction");
+          budgetObjectStore.clear();
+          alert("All saved transactions has been submitted!");
         })
         .catch((err) => {
           console.log(err);
@@ -56,5 +57,6 @@ function uploadExpenses() {
     }
   };
 }
-// Listen app coming back online/connecting
-window.addEventListener('online', uploadExpenses);
+
+// listen for app coming back online
+window.addEventListener("online", uploadTransaction);

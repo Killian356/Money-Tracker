@@ -15,7 +15,7 @@ To track finances visually and calculate them mathmatically. Even take them out 
 * Express
 
 ## Website
-https://killian356.github.io/Password-Generator/
+https://moneybudgeter.herokuapp.com/
 
 ## Contribution
 Made with ❤️ by Killian Chamberlain
