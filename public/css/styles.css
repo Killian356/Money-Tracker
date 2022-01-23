@@ -5,7 +5,7 @@ body {
 
 #add-btn,
 #sub-btn {
-  background-color: #7b7bfd;
+  background-color: #8989fc;
   color: white;
   padding-top: 2px;
   padding-bottom: 2px;
@@ -61,4 +61,3 @@ tr:nth-child(even) {
   width: 90%;
   margin: 0 auto;
 }
-
