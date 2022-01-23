@@ -1,12 +1,18 @@
 {
-  "name": "money-tracker",
+  "name": "budget-tracker",
   "version": "1.0.0",
-  "description": "",
+  "description": "PWA Application for tracking budgets",
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js",
     "lite-server": "lite-server"
+  },
+  "dependencies": {
+    "compression": "^1.7.4",
+    "express": "^4.17.1",
+    "mongoose": "^5.5.15",
+    "morgan": "^1.9.1"
   },
   "repository": {
     "type": "git",
@@ -17,11 +23,5 @@
   "bugs": {
     "url": "https://github.com/Killian356/Money-Tracker/issues"
   },
-  "homepage": "https://github.com/Killian356/Money-Tracker#readme",
-  "dependencies": {
-    "compression": "^1.7.4",
-    "express": "^4.17.1",
-    "mongoose": "^5.5.15",
-    "morgan": "^1.9.1"
-  }
+  "homepage": "https://github.com/Killian356/Money-Tracker#readme"
 }
