@@ -5,7 +5,10 @@ To track finances visually and calculate them mathmatically. Even take them out 
 
 ## Money Tracker
 ![Screenshot](public/images/MT-0.JPG "Money-Tracker")
+## Loaded Manifest and Offline Server
 ![Screenshot](public/images/MT-1.JPG "Money-Tracker")
+## Offline Functionality
+![Screenshot](public/images/MT-2.JPG "Money-Tracker")
 
 ## Built With
 * MongoDB
