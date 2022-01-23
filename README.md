@@ -17,6 +17,16 @@ To track finances visually and calculate them mathmatically. Even take them out 
 ## Website
 https://moneybudgeter.herokuapp.com/
 
+## License
+
+#### License Link 🎫
+
+- [License: MIT](LICENSE)
+
+#### Badge 🏆
+
+[![Badge](https://img.shields.io/badge/license-MIT-brightgreen/)](https://img.shields.io/badge/license-MIT-brightgreen/)
+
 ## Contribution
 Made with ❤️ by Killian Chamberlain
 

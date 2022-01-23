@@ -1,71 +1,61 @@
-// create variable to hold db connection
-let db;
+const APP_PREFIX = 'BudgetTracker-';
+const VERSION = 'version_01';
+const CACHE_NAME = APP_PREFIX + VERSION;
 
-// establish a connection to IndexedDB database called 'budget_tracker' and set it to version 1
-const request = indexedDB.open("budget_tracker", 1);
+// files that need to be cache(stored)
+const FILES_TO_CACHE = [
+    './index.html',
+    './css/styles.css',
+    './js/idb.js',
+    './js/index.js',
+    './manifest.json'
+];
 
-request.onupgradeneeded = function (event) {
-  const db = event.target.result;
-
-  db.createObjectStore("new_transaction", { autoIncrement: true });
-};
-
-request.onsuccess = function (event) {
-  db = event.target.result;
-
-  if (navigator.onLine) {
-  }
-};
-
-request.onerror = function (event) {
-  // log error here
-  console.log(event.target.errorCode);
-};
-
-function saveRecord(record) {
-  const transaction = db.transaction(["new_transaction"], "readwrite");
-
-  const budgetObjectStore = transaction.objectStore("new_transaction");
-
-  budgetObjectStore.add(record);
-}
-
-function uploadTransaction() {
-  const transaction = db.transaction(["new_transaction"], "readwrite");
-
-  const budgetObjectStore = transaction.objectStore("new_transaction");
-
-  const getAll = budgetObjectStore.getAll();
-
-  getAll.onsuccess = function () {
-    if (getAll.result.length > 0) {
-      fetch("/api/transaction", {
-        method: "POST",
-        body: JSON.stringify(getAll.result),
-        headers: {
-          Accept: "application/json, text/plain, */*",
-          "Content-Type": "application/json",
-        },
-      })
-        .then((response) => response.json())
-        .then((serverResponse) => {
-          if (serverResponse.message) {
-            throw new Error(serverResponse);
-          }
-
-          const transaction = db.transaction(["new_transaction"], "readwrite");
-
-          const budgetObjectStore = transaction.objectStore("new_transaction");
-
-          budgetObjectStore.clear();
-
-          alert("All saved transactions has been submitted!");
+// callback function
+self.addEventListener('install', function(e) {
+    e.waitUntil(
+        caches.open(CACHE_NAME).then(function (cache) {
+            console.log('installing cache : ' + CACHE_NAME)
+            return cache.addAll(FILES_TO_CACHE) 
         })
-        .catch((err) => {
-          console.log(err);
-        });
-    }
-  };
-}
+    )
+});
 
-window.addEventListener("online", uploadTransaction);
+self.addEventListener('activate', function (e) {
+    e.waitUntil(
+        caches.keys().then(function (keyList) {
+            let cacheKeeplist = keyList.filter(function (key) {
+                return key.indexOf(APP_PREFIX);
+            });
+            cacheKeeplist.push(CACHE_NAME);
+
+            return Promise.all(keyList.map(function (key, i) {
+                if(cacheKeeplist.indexOf(key) === -1) {
+                    console.log('deleting cache : ' = keyList[i]);
+                    return caches.delete(keyList[i]);
+                }
+            })
+            );
+        })
+    );
+});
+
+// event listener
+self.addEventListener('fetch', function(e) {
+    console.log('fetch request : ' + e.request.url )
+    e.respondWith(
+        caches.match(e.request).then(function (request) {
+            if(request) {
+                console.log('responding with cache : ' + e.request.url)
+                return request
+            } else {
+                console.log('file is not cached, fetching : ' + e.request.url)
+                return fetch(e.request)
+            }
+        
+            // You can omit if/else for console.log & put one line below like this too
+            // return request || fetch(e.request)
+        })
+    )
+});
+
